@@ -1,5 +1,72 @@
 // 页面加载完成后执行
 document.addEventListener('DOMContentLoaded', function() {
+    // GIF背景加载控制
+    const gifImage = document.querySelector('.gif-bg-image');
+    const gifLoading = document.querySelector('.gif-loading');
+    
+    if (gifImage) {
+        // 创建加载提示（如果不存在）
+        if (!gifLoading && gifImage.parentElement) {
+            const loadingDiv = document.createElement('div');
+            loadingDiv.className = 'gif-loading';
+            loadingDiv.textContent = '背景加载中...';
+            gifImage.parentElement.appendChild(loadingDiv);
+        }
+        
+        const loadingElement = document.querySelector('.gif-loading');
+        
+        // GIF加载完成时
+        gifImage.addEventListener('load', function() {
+            if (loadingElement) {
+                loadingElement.classList.add('hidden');
+                setTimeout(() => {
+                    if (loadingElement.parentElement) {
+                        loadingElement.parentElement.removeChild(loadingElement);
+                    }
+                }, 500);
+            }
+            this.style.opacity = '1';
+        });
+        
+        // GIF加载错误时
+        gifImage.addEventListener('error', function() {
+            if (loadingElement) {
+                loadingElement.textContent = '背景加载失败，使用备用背景';
+                loadingElement.classList.add('hidden');
+                setTimeout(() => {
+                    if (loadingElement.parentElement) {
+                        loadingElement.parentElement.removeChild(loadingElement);
+                    }
+                }, 2000);
+            }
+            // 显示备用CSS背景
+            const cssBg = document.createElement('div');
+            cssBg.className = 'css-animation-bg';
+            cssBg.innerHTML = `
+                <div class="grid-pattern"></div>
+                <div class="light-effect"></div>
+                <div class="particles"></div>
+                <div class="glass-mosaic"></div>
+            `;
+            this.parentElement.appendChild(cssBg);
+        });
+        
+        // 如果GIF已经加载（缓存情况）
+        if (gifImage.complete && gifImage.naturalWidth > 0) {
+            gifImage.style.opacity = '1';
+            if (loadingElement) {
+                loadingElement.classList.add('hidden');
+                setTimeout(() => {
+                    if (loadingElement.parentElement) {
+                        loadingElement.parentElement.removeChild(loadingElement);
+                    }
+                }, 100);
+            }
+        } else {
+            gifImage.style.opacity = '0';
+            gifImage.style.transition = 'opacity 1s ease';
+        }
+    }
     // 移动端菜单切换
     const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
     const navMenu = document.querySelector('.nav-menu');
