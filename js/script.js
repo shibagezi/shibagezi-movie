@@ -1,5 +1,32 @@
 // 页面加载完成后执行
 document.addEventListener('DOMContentLoaded', function() {
+    // 视频背景加载控制
+    const heroVideo = document.querySelector('.hero-video');
+    const videoLoading = document.querySelector('.video-loading');
+    
+    if (heroVideo && videoLoading) {
+        // 视频可以播放时
+        heroVideo.addEventListener('canplay', function() {
+            this.classList.add('loaded');
+            videoLoading.classList.add('hidden');
+        });
+        
+        // 视频加载错误时
+        heroVideo.addEventListener('error', function() {
+            videoLoading.textContent = '视频加载失败，显示静态背景';
+            videoLoading.classList.add('hidden');
+            // 可以在这里添加备用背景图片
+        });
+        
+        // 如果视频已经可以播放（缓存情况）
+        if (heroVideo.readyState >= 3) {
+            heroVideo.classList.add('loaded');
+            videoLoading.classList.add('hidden');
+        }
+        
+        // 添加视频预加载优化
+        heroVideo.load();
+    }
     // 移动端菜单切换
     const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
     const navMenu = document.querySelector('.nav-menu');
