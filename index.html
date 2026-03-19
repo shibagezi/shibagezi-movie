@@ -32,15 +32,12 @@
 
     <!-- 首页横幅 -->
     <section id="home" class="hero">
-        <div class="water-horse-background">
-            <!-- 暂时使用CSS动画，视频压缩后替换 -->
-            <div class="water-horse-css-bg">
-                <div class="water-flow"></div>
-                <div class="horse-silhouette"></div>
-                <div class="road-lines"></div>
-                <div class="city-lights"></div>
-            </div>
-            <div class="bg-overlay"></div>
+        <div class="video-background">
+            <video autoplay muted loop playsinline class="video-bg" preload="metadata">
+                <source src="videos/shibagezi-bg.mp4" type="video/mp4">
+                您的浏览器不支持视频背景。
+            </video>
+            <div class="video-overlay"></div>
         </div>
         <div class="hero-overlay"></div>
         <div class="container">

@@ -1,40 +1,68 @@
 // 页面加载完成后执行
 document.addEventListener('DOMContentLoaded', function() {
-    // 水马青年路背景初始化
-    const waterHorseBg = document.querySelector('.water-horse-background');
+    // 视频背景加载控制
+    const videoBg = document.querySelector('.video-bg');
     
-    if (waterHorseBg) {
-        // 可以在这里添加交互效果
-        // 例如：鼠标移动时背景微动
-        waterHorseBg.addEventListener('mousemove', function(e) {
-            const x = (e.clientX / window.innerWidth) * 10;
-            const y = (e.clientY / window.innerHeight) * 10;
-            
-            const waterFlow = this.querySelector('.water-flow');
-            const horseSilhouette = this.querySelector('.horse-silhouette');
-            
-            if (waterFlow) {
-                waterFlow.style.transform = `translate(${x}px, ${y}px)`;
-            }
-            if (horseSilhouette) {
-                horseSilhouette.style.transform = `translate(${x * 0.5}px, ${y * 0.5}px)`;
+    if (videoBg) {
+        // 创建加载提示
+        const loadingDiv = document.createElement('div');
+        loadingDiv.className = 'video-loading';
+        loadingDiv.textContent = '背景视频加载中...';
+        videoBg.parentElement.appendChild(loadingDiv);
+        
+        const loadingElement = document.querySelector('.video-loading');
+        
+        // 视频可以播放时
+        videoBg.addEventListener('canplay', function() {
+            this.classList.add('loaded');
+            if (loadingElement) {
+                loadingElement.classList.add('hidden');
+                setTimeout(() => {
+                    if (loadingElement.parentElement) {
+                        loadingElement.parentElement.removeChild(loadingElement);
+                    }
+                }, 500);
             }
         });
         
-        // 鼠标离开时恢复
-        waterHorseBg.addEventListener('mouseleave', function() {
-            const waterFlow = this.querySelector('.water-flow');
-            const horseSilhouette = this.querySelector('.horse-silhouette');
-            
-            if (waterFlow) {
-                waterFlow.style.transform = 'translate(0, 0)';
-                waterFlow.style.transition = 'transform 1s ease';
+        // 视频加载错误时
+        videoBg.addEventListener('error', function() {
+            if (loadingElement) {
+                loadingElement.textContent = '视频加载失败，使用备用背景';
+                loadingElement.classList.add('hidden');
+                setTimeout(() => {
+                    if (loadingElement.parentElement) {
+                        loadingElement.parentElement.removeChild(loadingElement);
+                    }
+                }, 2000);
             }
-            if (horseSilhouette) {
-                horseSilhouette.style.transform = 'translate(0, 0)';
-                horseSilhouette.style.transition = 'transform 1s ease';
-            }
+            // 显示备用CSS背景
+            const cssBg = document.createElement('div');
+            cssBg.className = 'css-animation-bg';
+            cssBg.innerHTML = `
+                <div class="grid-pattern"></div>
+                <div class="light-effect"></div>
+                <div class="particles"></div>
+                <div class="glass-mosaic"></div>
+            `;
+            this.parentElement.appendChild(cssBg);
         });
+        
+        // 如果视频已经可以播放（缓存情况）
+        if (videoBg.readyState >= 3) {
+            videoBg.classList.add('loaded');
+            if (loadingElement) {
+                loadingElement.classList.add('hidden');
+                setTimeout(() => {
+                    if (loadingElement.parentElement) {
+                        loadingElement.parentElement.removeChild(loadingElement);
+                    }
+                }, 100);
+            }
+        }
+        
+        // 添加视频预加载优化
+        videoBg.load();
     }
     // 移动端菜单切换
     const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
