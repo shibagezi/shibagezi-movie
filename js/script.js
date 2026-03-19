@@ -1,22 +1,20 @@
 // 页面加载完成后执行
 document.addEventListener('DOMContentLoaded', function() {
-    // GIF背景加载控制
-    const gifImage = document.querySelector('.gif-bg-image');
-    const gifLoading = document.querySelector('.gif-loading');
+    // 视频背景加载控制
+    const videoBg = document.querySelector('.video-bg');
     
-    if (gifImage) {
-        // 创建加载提示（如果不存在）
-        if (!gifLoading && gifImage.parentElement) {
-            const loadingDiv = document.createElement('div');
-            loadingDiv.className = 'gif-loading';
-            loadingDiv.textContent = '背景加载中...';
-            gifImage.parentElement.appendChild(loadingDiv);
-        }
+    if (videoBg) {
+        // 创建加载提示
+        const loadingDiv = document.createElement('div');
+        loadingDiv.className = 'video-loading';
+        loadingDiv.textContent = '背景视频加载中...';
+        videoBg.parentElement.appendChild(loadingDiv);
         
-        const loadingElement = document.querySelector('.gif-loading');
+        const loadingElement = document.querySelector('.video-loading');
         
-        // GIF加载完成时
-        gifImage.addEventListener('load', function() {
+        // 视频可以播放时
+        videoBg.addEventListener('canplay', function() {
+            this.classList.add('loaded');
             if (loadingElement) {
                 loadingElement.classList.add('hidden');
                 setTimeout(() => {
@@ -25,13 +23,12 @@ document.addEventListener('DOMContentLoaded', function() {
                     }
                 }, 500);
             }
-            this.style.opacity = '1';
         });
         
-        // GIF加载错误时
-        gifImage.addEventListener('error', function() {
+        // 视频加载错误时
+        videoBg.addEventListener('error', function() {
             if (loadingElement) {
-                loadingElement.textContent = '背景加载失败，使用备用背景';
+                loadingElement.textContent = '视频加载失败，使用动画背景';
                 loadingElement.classList.add('hidden');
                 setTimeout(() => {
                     if (loadingElement.parentElement) {
@@ -51,9 +48,9 @@ document.addEventListener('DOMContentLoaded', function() {
             this.parentElement.appendChild(cssBg);
         });
         
-        // 如果GIF已经加载（缓存情况）
-        if (gifImage.complete && gifImage.naturalWidth > 0) {
-            gifImage.style.opacity = '1';
+        // 如果视频已经可以播放（缓存情况）
+        if (videoBg.readyState >= 3) {
+            videoBg.classList.add('loaded');
             if (loadingElement) {
                 loadingElement.classList.add('hidden');
                 setTimeout(() => {
@@ -62,10 +59,10 @@ document.addEventListener('DOMContentLoaded', function() {
                     }
                 }, 100);
             }
-        } else {
-            gifImage.style.opacity = '0';
-            gifImage.style.transition = 'opacity 1s ease';
         }
+        
+        // 添加视频预加载优化
+        videoBg.load();
     }
     // 移动端菜单切换
     const mobileMenuBtn = document.querySelector('.mobile-menu-btn');

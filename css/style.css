@@ -293,8 +293,8 @@ body {
     }
 }
 
-/* GIF背景样式 */
-.gif-background {
+/* 视频背景样式 */
+.video-background {
     position: absolute;
     top: 0;
     left: 0;
@@ -304,7 +304,7 @@ body {
     overflow: hidden;
 }
 
-.gif-bg-image {
+.video-bg {
     position: absolute;
     top: 0;
     left: 0;
@@ -313,14 +313,17 @@ body {
     object-fit: cover;
     object-position: center;
     /* 性能优化 */
-    image-rendering: -webkit-optimize-contrast;
-    image-rendering: crisp-edges;
-    image-rendering: pixelated;
     will-change: transform;
     transform: translateZ(0);
+    opacity: 0;
+    transition: opacity 1s ease;
 }
 
-.gif-overlay {
+.video-bg.loaded {
+    opacity: 1;
+}
+
+.video-overlay {
     position: absolute;
     top: 0;
     left: 0;
@@ -335,8 +338,8 @@ body {
     z-index: 1;
 }
 
-/* GIF加载优化 */
-.gif-loading {
+/* 视频加载优化 */
+.video-loading {
     position: absolute;
     top: 50%;
     left: 50%;
@@ -351,7 +354,7 @@ body {
     transition: opacity 0.5s ease;
 }
 
-.gif-loading.hidden {
+.video-loading.hidden {
     opacity: 0;
     pointer-events: none;
 }
