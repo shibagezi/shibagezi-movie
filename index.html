@@ -7,6 +7,8 @@
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
+    <!-- 毛笔字体 -->
+    <link href="https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&family=ZCOOL+XiaoWei&display=swap" rel="stylesheet">
 </head>
 <body>
     <!-- 导航栏 -->
@@ -42,12 +44,45 @@
         <div class="hero-overlay"></div>
         <div class="container">
             <div class="hero-content">
-                <h1 class="hero-title">十八格子影视</h1>
-                <p class="hero-subtitle">专业影视制作 · 创意视觉表达 · 品质内容创作</p>
-                <p class="hero-description">成立于2013年，致力于为客户提供全方位的影视制作服务，从创意策划到后期制作，我们用心打造每一个镜头。</p>
+                <!-- 主标题 - 毛笔字体 -->
+                <div class="title-container">
+                    <h1 class="hero-title brush-font">十八格子影视</h1>
+                    <div class="title-shadow"></div>
+                    <div class="title-highlight"></div>
+                </div>
+                
+                <!-- 副标题 - 艺术化设计 -->
+                <div class="subtitle-container">
+                    <p class="hero-subtitle art-subtitle">
+                        <span class="text-mask">专业影视制作</span>
+                        <span class="divider">·</span>
+                        <span class="text-mask">创意视觉表达</span>
+                        <span class="divider">·</span>
+                        <span class="text-mask">品质内容创作</span>
+                    </p>
+                    <div class="subtitle-glow"></div>
+                </div>
+                
+                <!-- 描述文字 - 带遮罩效果 -->
+                <div class="description-container">
+                    <div class="description-mask">
+                        <p class="hero-description art-description">
+                            成立于2013年，致力于为客户提供全方位的影视制作服务，从创意策划到后期制作，我们用心打造每一个镜头。
+                        </p>
+                    </div>
+                    <div class="description-border"></div>
+                </div>
+                
+                <!-- 按钮 -->
                 <div class="hero-buttons">
-                    <a href="#portfolio" class="btn btn-primary">查看作品</a>
-                    <a href="#contact" class="btn btn-secondary">联系我们</a>
+                    <a href="#portfolio" class="btn btn-primary art-btn">
+                        <span class="btn-icon">🎬</span>
+                        查看作品
+                    </a>
+                    <a href="#contact" class="btn btn-secondary art-btn">
+                        <span class="btn-icon">📞</span>
+                        联系我们
+                    </a>
                 </div>
             </div>
         </div>
