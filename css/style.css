@@ -317,6 +317,8 @@ body {
     transform: translateZ(0);
     opacity: 0;
     transition: opacity 1s ease;
+    /* 提高视频亮度 */
+    filter: brightness(1.1);
 }
 
 .video-bg.loaded {
@@ -329,12 +331,7 @@ body {
     left: 0;
     width: 100%;
     height: 100%;
-    background: linear-gradient(
-        to bottom,
-        rgba(0, 0, 0, 0.7) 0%,
-        rgba(0, 0, 0, 0.5) 50%,
-        rgba(0, 0, 0, 0.7) 100%
-    );
+    background: rgba(0, 0, 0, 0.1); /* 10%透明度遮罩，让视频更亮 */
     z-index: 1;
 }
 
@@ -365,7 +362,7 @@ body {
     left: 0;
     width: 100%;
     height: 100%;
-    background: linear-gradient(45deg, rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.4));
+    background: linear-gradient(45deg, rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.1)); /* 减少遮罩透明度，让视频更亮 */
 }
 
 .hero-content {
