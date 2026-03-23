@@ -35,8 +35,10 @@
     <!-- 首页横幅 -->
     <section id="home" class="hero">
         <div class="video-background">
-            <video autoplay muted loop playsinline class="video-bg" preload="metadata">
-                <source src="videos/shibagezi-bg.mp4" type="video/mp4">
+            <video autoplay muted loop playsinline class="video-bg" preload="auto" poster="images/官网背景_00168.jpg">
+                <source src="videos/test-bg.mp4" type="video/mp4">
+                <!-- 备用：如果视频加载失败，显示图片 -->
+                <img src="images/官网背景_00168.jpg" alt="背景图片" style="width: 100%; height: 100%; object-fit: cover;">
                 您的浏览器不支持视频背景。
             </video>
             <div class="video-overlay"></div>

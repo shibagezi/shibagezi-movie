@@ -146,11 +146,6 @@ body {
     align-items: center;
     position: relative;
     overflow: hidden;
-    /* 添加图片背景作为视频的备用 */
-    background-image: url('../images/官网背景_00168.jpg');
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
 }
 
 /* CSS动画背景 */
