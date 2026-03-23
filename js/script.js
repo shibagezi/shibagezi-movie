@@ -1,5 +1,21 @@
 // 页面加载完成后执行
 document.addEventListener('DOMContentLoaded', function() {
+    // 视频调试功能
+    const debugDiv = document.getElementById('videoDebug');
+    const statusSpan = document.getElementById('videoStatus');
+    
+    // 显示调试信息（仅开发时使用）
+    if (debugDiv && window.location.hostname === 'localhost') {
+        debugDiv.style.display = 'block';
+    }
+    
+    function updateVideoStatus(status) {
+        if (statusSpan) {
+            statusSpan.textContent = status;
+            console.log('视频状态:', status);
+        }
+    }
+    
     // 视频背景加载控制
     const videoBg = document.querySelector('.video-bg');
     
@@ -14,6 +30,7 @@ document.addEventListener('DOMContentLoaded', function() {
         
         // 视频可以播放时
         videoBg.addEventListener('canplay', function() {
+            updateVideoStatus('可以播放，正在淡入');
             this.classList.add('loaded');
             if (loadingElement) {
                 loadingElement.classList.add('hidden');
@@ -27,6 +44,7 @@ document.addEventListener('DOMContentLoaded', function() {
         
         // 视频加载错误时
         videoBg.addEventListener('error', function() {
+            updateVideoStatus('加载错误: ' + this.error.code);
             if (loadingElement) {
                 loadingElement.textContent = '视频加载失败，使用备用背景';
                 loadingElement.classList.add('hidden');
@@ -61,7 +79,17 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         }
         
+        // 添加更多事件监听
+        videoBg.addEventListener('loadstart', () => updateVideoStatus('开始加载'));
+        videoBg.addEventListener('progress', () => updateVideoStatus('加载中...'));
+        videoBg.addEventListener('loadedmetadata', () => updateVideoStatus('元数据加载完成'));
+        videoBg.addEventListener('loadeddata', () => updateVideoStatus('数据加载完成'));
+        videoBg.addEventListener('waiting', () => updateVideoStatus('等待数据'));
+        videoBg.addEventListener('stalled', () => updateVideoStatus('网络停滞'));
+        videoBg.addEventListener('suspend', () => updateVideoStatus('暂停加载'));
+        
         // 添加视频预加载优化
+        updateVideoStatus('开始预加载视频');
         videoBg.load();
     }
     // 移动端菜单切换
