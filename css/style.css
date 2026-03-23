@@ -655,7 +655,7 @@ body {
     background-position: center;
     background-repeat: no-repeat;
     z-index: -1;
-    opacity: 0.1;
+    opacity: 0.3;
 }
 
 /* 确保内容在背景之上 */
