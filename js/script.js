@@ -278,4 +278,123 @@ document.addEventListener('DOMContentLoaded', function() {
             numberObserver.observe(number);
         });
     }
+    
+    // 视频播放功能
+    initVideoPortfolio();
 });
+
+// 视频作品展示功能
+function initVideoPortfolio() {
+    const videoItems = document.querySelectorAll('.video-portfolio-item');
+    const videoModal = document.getElementById('videoModal');
+    const modalVideoPlayer = document.getElementById('modalVideoPlayer');
+    const modalCloseBtn = document.querySelector('.video-modal-close');
+    const modalOverlay = document.querySelector('.video-modal-overlay');
+    
+    if (!videoModal || !modalVideoPlayer) return;
+    
+    // 为每个视频项添加点击事件
+    videoItems.forEach(item => {
+        item.addEventListener('click', function() {
+            const videoSrc = this.getAttribute('data-video');
+            
+            if (videoSrc && videoSrc !== '#') {
+                // 设置视频源
+                modalVideoPlayer.src = videoSrc;
+                
+                // 显示模态框
+                videoModal.style.display = 'block';
+                document.body.style.overflow = 'hidden'; // 防止背景滚动
+                
+                // 播放视频
+                setTimeout(() => {
+                    modalVideoPlayer.play().catch(e => {
+                        console.log('自动播放失败，需要用户交互:', e);
+                    });
+                }, 300);
+            } else {
+                alert('此视频暂未上传，敬请期待！');
+            }
+        });
+        
+        // 添加键盘导航支持
+        item.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                this.click();
+            }
+        });
+        
+        // 设置可访问性属性
+        item.setAttribute('tabindex', '0');
+        item.setAttribute('role', 'button');
+        item.setAttribute('aria-label', '播放视频');
+    });
+    
+    // 关闭模态框功能
+    function closeVideoModal() {
+        // 暂停视频
+        modalVideoPlayer.pause();
+        modalVideoPlayer.currentTime = 0;
+        modalVideoPlayer.src = '';
+        
+        // 隐藏模态框
+        videoModal.style.display = 'none';
+        document.body.style.overflow = ''; // 恢复滚动
+    }
+    
+    // 关闭按钮点击事件
+    if (modalCloseBtn) {
+        modalCloseBtn.addEventListener('click', closeVideoModal);
+    }
+    
+    // 点击遮罩层关闭
+    if (modalOverlay) {
+        modalOverlay.addEventListener('click', closeVideoModal);
+    }
+    
+    // ESC键关闭
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape' && videoModal.style.display === 'block') {
+            closeVideoModal();
+        }
+    });
+    
+    // 模态框内点击不关闭
+    const modalContent = document.querySelector('.video-modal-content');
+    if (modalContent) {
+        modalContent.addEventListener('click', function(e) {
+            e.stopPropagation();
+        });
+    }
+    
+    // 视频播放器事件处理
+    modalVideoPlayer.addEventListener('ended', function() {
+        // 视频播放结束后可以添加一些效果
+        console.log('视频播放结束');
+    });
+    
+    // 视频错误处理
+    modalVideoPlayer.addEventListener('error', function() {
+        console.error('视频播放错误:', this.error);
+        alert('视频加载失败，请检查网络连接或视频文件。');
+    });
+    
+    // 预加载第一个视频的预览
+    const firstVideoItem = document.querySelector('.video-portfolio-item[data-video="videos/政府宣传片.mp4"]');
+    if (firstVideoItem) {
+        const previewVideo = firstVideoItem.querySelector('.preview-video');
+        if (previewVideo) {
+            // 设置预览视频静音播放几秒
+            previewVideo.currentTime = 5; // 从第5秒开始预览
+            previewVideo.play().then(() => {
+                setTimeout(() => {
+                    previewVideo.pause();
+                    previewVideo.currentTime = 0;
+                }, 3000); // 播放3秒后暂停
+            }).catch(e => {
+                console.log('预览视频自动播放失败:', e);
+            });
+        }
+    }
+}
