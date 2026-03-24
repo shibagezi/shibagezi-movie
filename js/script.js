@@ -299,19 +299,43 @@ function initVideoPortfolio() {
             const videoSrc = this.getAttribute('data-video');
             
             if (videoSrc && videoSrc !== '#') {
-                // 设置视频源
-                modalVideoPlayer.src = videoSrc;
+                // 显示加载提示
+                showVideoLoading();
                 
                 // 显示模态框
                 videoModal.style.display = 'block';
                 document.body.style.overflow = 'hidden'; // 防止背景滚动
                 
-                // 播放视频
-                setTimeout(() => {
+                // 设置视频源
+                modalVideoPlayer.src = videoSrc;
+                
+                // 预加载视频
+                modalVideoPlayer.preload = 'auto';
+                
+                // 监听视频可以播放事件
+                modalVideoPlayer.addEventListener('canplay', function onCanPlay() {
+                    // 移除监听器，避免重复触发
+                    modalVideoPlayer.removeEventListener('canplay', onCanPlay);
+                    
+                    // 隐藏加载提示
+                    hideVideoLoading();
+                    
+                    // 播放视频
                     modalVideoPlayer.play().catch(e => {
                         console.log('自动播放失败，需要用户交互:', e);
+                        // 显示播放按钮让用户点击
+                        showPlayButton();
                     });
-                }, 300);
+                }, { once: true });
+                
+                // 设置超时，避免长时间等待
+                setTimeout(() => {
+                    if (modalVideoPlayer.readyState < 2) { // 还没有足够数据
+                        hideVideoLoading();
+                        showBufferingMessage();
+                    }
+                }, 5000);
+                
             } else {
                 alert('此视频暂未上传，敬请期待！');
             }
@@ -395,6 +419,58 @@ function initVideoPortfolio() {
             }).catch(e => {
                 console.log('预览视频自动播放失败:', e);
             });
+        }
+    }
+    
+    // 视频加载相关函数
+    function showVideoLoading() {
+        // 创建或获取加载覆盖层
+        let loadingOverlay = document.getElementById('videoLoadingOverlay');
+        if (!loadingOverlay) {
+            loadingOverlay = document.createElement('div');
+            loadingOverlay.id = 'videoLoadingOverlay';
+            loadingOverlay.className = 'video-loading-overlay';
+            loadingOverlay.innerHTML = `
+                <div class="video-loading-spinner"></div>
+                <div class="video-loading-text">视频加载中...</div>
+            `;
+            document.querySelector('.video-modal-content').appendChild(loadingOverlay);
+        }
+        loadingOverlay.classList.remove('hidden');
+    }
+    
+    function hideVideoLoading() {
+        const loadingOverlay = document.getElementById('videoLoadingOverlay');
+        if (loadingOverlay) {
+            loadingOverlay.classList.add('hidden');
+        }
+    }
+    
+    function showBufferingMessage() {
+        const loadingOverlay = document.getElementById('videoLoadingOverlay');
+        if (loadingOverlay) {
+            loadingOverlay.innerHTML = `
+                <div class="video-buffering-message">
+                    <div class="video-loading-text">视频加载较慢，请稍候...</div>
+                    <div style="font-size: 14px; opacity: 0.8; margin-top: 5px;">
+                        建议：检查网络连接或使用WiFi
+                    </div>
+                </div>
+            `;
+        }
+    }
+    
+    function showPlayButton() {
+        const loadingOverlay = document.getElementById('videoLoadingOverlay');
+        if (loadingOverlay) {
+            loadingOverlay.innerHTML = `
+                <div class="video-buffering-message">
+                    <div class="video-loading-text">点击播放按钮开始播放</div>
+                    <button class="video-play-button" onclick="document.getElementById('modalVideoPlayer').play()">
+                        <i class="fas fa-play" style="margin-right: 8px;"></i>播放视频
+                    </button>
+                </div>
+            `;
         }
     }
 }
