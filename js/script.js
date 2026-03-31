@@ -297,45 +297,51 @@ function initVideoPortfolio() {
     videoItems.forEach(item => {
         item.addEventListener('click', function() {
             const videoSrc = this.getAttribute('data-video');
+            const isExternal = this.getAttribute('data-external') === 'true';
             
             if (videoSrc && videoSrc !== '#') {
-                // 显示加载提示
-                showVideoLoading();
-                
-                // 显示模态框
-                videoModal.style.display = 'block';
-                document.body.style.overflow = 'hidden'; // 防止背景滚动
-                
-                // 设置视频源
-                modalVideoPlayer.src = videoSrc;
-                
-                // 预加载视频
-                modalVideoPlayer.preload = 'auto';
-                
-                // 监听视频可以播放事件
-                modalVideoPlayer.addEventListener('canplay', function onCanPlay() {
-                    // 移除监听器，避免重复触发
-                    modalVideoPlayer.removeEventListener('canplay', onCanPlay);
+                if (isExternal) {
+                    // 外部视频链接，直接在新窗口打开
+                    window.open(videoSrc, '_blank');
+                } else {
+                    // 本地视频，使用模态框播放
+                    // 显示加载提示
+                    showVideoLoading();
                     
-                    // 隐藏加载提示
-                    hideVideoLoading();
+                    // 显示模态框
+                    videoModal.style.display = 'block';
+                    document.body.style.overflow = 'hidden'; // 防止背景滚动
                     
-                    // 播放视频
-                    modalVideoPlayer.play().catch(e => {
-                        console.log('自动播放失败，需要用户交互:', e);
-                        // 显示播放按钮让用户点击
-                        showPlayButton();
-                    });
-                }, { once: true });
-                
-                // 设置超时，避免长时间等待
-                setTimeout(() => {
-                    if (modalVideoPlayer.readyState < 2) { // 还没有足够数据
+                    // 设置视频源
+                    modalVideoPlayer.src = videoSrc;
+                    
+                    // 预加载视频
+                    modalVideoPlayer.preload = 'auto';
+                    
+                    // 监听视频可以播放事件
+                    modalVideoPlayer.addEventListener('canplay', function onCanPlay() {
+                        // 移除监听器，避免重复触发
+                        modalVideoPlayer.removeEventListener('canplay', onCanPlay);
+                        
+                        // 隐藏加载提示
                         hideVideoLoading();
-                        showBufferingMessage();
-                    }
-                }, 5000);
-                
+                        
+                        // 播放视频
+                        modalVideoPlayer.play().catch(e => {
+                            console.log('自动播放失败，需要用户交互:', e);
+                            // 显示播放按钮让用户点击
+                            showPlayButton();
+                        });
+                    }, { once: true });
+                    
+                    // 设置超时，避免长时间等待
+                    setTimeout(() => {
+                        if (modalVideoPlayer.readyState < 2) { // 还没有足够数据
+                            hideVideoLoading();
+                            showBufferingMessage();
+                        }
+                    }, 5000);
+                }
             } else {
                 alert('此视频暂未上传，敬请期待！');
             }

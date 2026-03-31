@@ -1400,3 +1400,38 @@ body {
 .hidden {
     display: none !important;
 }
+
+/* 外部视频预览样式 */
+.external-video-preview {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+    border-radius: 12px;
+}
+
+.external-video-preview i {
+    color: #fff;
+    font-size: 48px;
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+    margin-bottom: 10px;
+}
+
+.external-video-preview p {
+    color: #fff;
+    margin: 5px 0;
+    text-align: center;
+}
+
+.external-video-preview p:first-of-type {
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.external-video-preview p:last-of-type {
+    font-size: 14px;
+    opacity: 0.8;
+}
